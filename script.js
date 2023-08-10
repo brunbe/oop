@@ -3,7 +3,7 @@
 const Person = function (firstName, birthYear) {
   // instance properties
   this.firstName = firstName;
-  this.brithYear = birthYear;
+  this.birthYear = birthYear;
 
   // NEVER CREATE METHODS IN A CONSTRUCTOR FUNCTION: THEY MUST BE CREATED ON THE PROTOTYPE. (OTHERWISE THEY WILL BE DUPLICATED ON EVERY NEW INSTANCE)
   // this.calcAge = function () {
@@ -35,7 +35,7 @@ console.log(jack, jay);
 
 // PROTOTYPES
 Person.prototype.calcAge = function () {
-  console.log(2037 - this.brithYear);
+  console.log(2037 - this.birthYear);
 };
 
 // clac age is now on the prototype
@@ -292,4 +292,106 @@ ford.speedUs = 100;
 ford.acc();
 ford.brake();
 ford.brake();
+*/
+
+/////////////////////////////////
+// inheritance between classes //
+/////////////////////////////////
+
+// student will be a child class of person
+
+// with constructor functions:
+
+// put the CF of the parent class in the child class
+// this keyword in CF of parent class must be set
+// to the same this keyword as in CF of child class: use call method
+
+const Student = function (firstName, birthYear, course) {
+  Person.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+// now the the prototypes must be linked.
+// The prototype of the Student CF should be equal to
+// the prototype property of the Person CF.
+
+Student.prototype = Object.create(Person.prototype);
+// this will over write any methods that have already been created on Student.prototype
+// we need Object.create to make a deep copy of the object i.e. make new object in the heap
+// Student.prototype = Person.prototype would point to the same object in the heap.
+
+Student.prototype.introduce = function () {
+  console.log(
+    `I'm ${this.firstName} and I'm ${this.birthYear} and I study ${this.course}`
+  );
+};
+
+const mike = new Student('Mike', 2017, 'CS');
+console.log(mike);
+mike.introduce();
+mike.calcAge();
+
+console.log(mike.__proto__);
+console.log(mike.__proto__.__proto__);
+
+// the constructor point to Person, this in correct
+console.log(Student.prototype.constructor);
+//set the constructor manually Student:
+Student.prototype.constructor = Student;
+console.log(Student.prototype.constructor);
+
+console.log(mike instanceof Student);
+console.log(mike instanceof Person);
+
+/*
+
+////////////////////////
+// coding challenge 3 //
+////////////////////////
+
+const Car = function (make, speed) {
+  this.make = make;
+  this.speed = speed;
+};
+
+Car.prototype.acc = function () {
+  this.speed += 10;
+  console.log(`The ${this.make} is now going at ${this.speed} km/h.`);
+};
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(`The ${this.make} is now going at ${this.speed} km/h.`);
+};
+
+const EV = function (make, speed, charge) {
+  Car.call(this, make, speed);
+  this.charge = charge;
+};
+
+EV.prototype = Object.create(Car.prototype);
+EV.prototype.constructor = EV;
+console.log(EV.prototype.constructor);
+
+EV.prototype.acc = function () {
+  this.speed += 20;
+  this.charge--;
+  console.log(
+    `The ${this.make} is now going at ${this.speed} km/h. Its charge is ${this.charge}%`
+  );
+
+  EV.prototype.chargeBat = function (chargeTo) {
+    this.charge = chargeTo;
+    console.log(`${this.make} battery at ${this.charge}%`);
+  };
+};
+
+const tesla = new EV('Tesla', 120, 23);
+tesla.acc();
+tesla.chargeBat(50);
+
+console.log(EV.prototype);
+
+const beemer = new Car('BMW', 120);
+beemer.acc();
+
 */
