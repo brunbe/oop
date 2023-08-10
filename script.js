@@ -7,7 +7,7 @@ const Person = function (firstName, birthYear) {
 
   // NEVER CREATE METHODS IN A CONSTRUCTOR FUNCTION: THEY MUST BE CREATED ON THE PROTOTYPE. (OTHERWISE THEY WILL BE DUPLICATED ON EVERY NEW INSTANCE)
   // this.calcAge = function () {
-  //   console.log(2037 - this.brithYear);
+  //   console.log(2037 - this.birthYear);
   // };
 };
 
@@ -232,8 +232,9 @@ const PersonProto = {
     console.log(2037 - this.birthYear);
   },
 
-  init(fullName, birthYear) {
-    (this.fullName = fullName), (this.brithYear = birthYear);
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
   },
 };
 
@@ -253,7 +254,7 @@ steven.birthYear = 1991;
 // this method fulfills the role a CF but is not a CF.
 */
 
-steven.init('Steven Smith', 1991);
+steven.init('Steven', 1991);
 console.log(steven);
 
 /*
@@ -300,7 +301,7 @@ ford.brake();
 
 // student will be a child class of person
 
-// with constructor functions:
+// WITH CONSTRUCTOR FUNCIONTS:
 
 // put the CF of the parent class in the child class
 // this keyword in CF of parent class must be set
@@ -342,6 +343,57 @@ console.log(Student.prototype.constructor);
 
 console.log(mike instanceof Student);
 console.log(mike instanceof Person);
+
+// WITH CLASSES: EXTENDS KEYWORD AND SUPER FUNCTION
+
+class StudentCl extends PersonCl {
+  constructor(fullName, birthYear, course) {
+    super(fullName, birthYear);
+    this.course = course;
+  }
+
+  introduce() {
+    console.log(
+      `I'm ${this.fullName} and I'm ${2037 - this.birthYear} and I study ${
+        this.course
+      }`
+    );
+  }
+
+  //let's test polymorphism
+  calcAge() {
+    console.log(`I'm ${2037 - 2012} years old.`);
+  }
+}
+
+const martha = new StudentCl('Martha Jones', 2012, 'Spanish');
+martha.introduce();
+martha.calcAge();
+console.dir(martha);
+
+// WITH OBJECT.CREATE: ESTABLISH THE PROTOTYPE CHAIN MANUALLY.
+
+const StudentProto = Object.create(PersonProto);
+
+// lets create and init-method for Student and reuse the init-method of person
+
+StudentProto.init = function (firstName, birthYear, course) {
+  PersonProto.init.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+StudentProto.introduce = function () {
+  console.log(
+    `I'm ${this.firstName} and I'm ${2037 - this.birthYear} and I study ${
+      this.course
+    }`
+  );
+};
+
+const avrell = Object.create(StudentProto);
+avrell.init('Avrell', 2010, 'CS');
+avrell.introduce();
+avrell.calcAge();
 
 /*
 
