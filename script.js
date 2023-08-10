@@ -5,7 +5,7 @@ const Person = function (firstName, birthYear) {
   this.firstName = firstName;
   this.brithYear = birthYear;
 
-  // NEVER CREATE METHODS IN A CONSTRUCTOR FUNCTION: THEY MUS BE CREATED ON THE PROTOTYPE. (OTHERWISE THEY WILL BE DUPLICATED ON EVERY NEW INSTANCE)
+  // NEVER CREATE METHODS IN A CONSTRUCTOR FUNCTION: THEY MUST BE CREATED ON THE PROTOTYPE. (OTHERWISE THEY WILL BE DUPLICATED ON EVERY NEW INSTANCE)
   // this.calcAge = function () {
   //   console.log(2037 - this.brithYear);
   // };
@@ -255,3 +255,41 @@ steven.birthYear = 1991;
 
 steven.init('Steven Smith', 1991);
 console.log(steven);
+
+/*
+////////////////////////
+// coding challenge 2 //
+////////////////////////
+
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+  acc() {
+    this.speed += 10;
+    console.log(`The ${this.make} is now going at ${this.speed} km/h.`);
+  }
+  brake() {
+    this.speed -= 5;
+    console.log(`The ${this.make} is now going at ${this.speed} km/h.`);
+  }
+
+  get speedUs() {
+    console.log(`The ${this.make} is now going at ${this.speed / 1.6} mph.`);
+  }
+  set speedUs(mph) {
+    this.speed = mph * 1.6;
+  }
+}
+
+const beemer = new CarCl('BMW', 120);
+const benz = new CarCl('Mercedes', 120);
+const ford = new CarCl('Ford', 120);
+
+ford.speedUs;
+ford.speedUs = 100;
+ford.acc();
+ford.brake();
+ford.brake();
+*/
