@@ -95,3 +95,112 @@ console.dir(h1);
 
 // FUNCTIONS also have prototypes
 console.dir(a => a + 1);
+
+/*
+///////////// coding challenge 1 ////////////////
+
+const Car = function (make, speed) {
+  this.make = make;
+  this.speed = speed;
+};
+
+Car.prototype.acc = function () {
+  this.speed += 10;
+  console.log(`The ${this.make} is now going at ${this.speed} km/h.`);
+};
+Car.prototype.brake = function () {
+  this.speed -= 5;
+  console.log(`The ${this.make} is now going at ${this.speed} km/h.`);
+};
+
+const beemer = new Car('BMW', 120);
+const merc = new Car('Mercedes', 95);
+
+beemer.acc();
+merc.brake();
+beemer.brake();
+merc.acc();
+*/
+
+////////////////////////////
+// ES6 CLASSES
+////////////////////////////
+/*
+// class Expression:
+const PersonCl = class {} */
+
+// class Declaration:
+class PersonCl {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  // everyting outside the constructor is on the prototype
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  }
+
+  greet() {
+    console.log(`Hello ${this.firstName}!`);
+  }
+
+  get age() {
+    return 2037 - this.birthYear;
+  }
+
+  set fullName(name) {
+    if (name.includes(' ')) this._fullName = name;
+    else alert(`${name} is not a full name.`);
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+}
+
+//create a new instance of PersonCl
+const bruno = new PersonCl('Bruno Declercq', 1984);
+//check if calcAge is in instance: No
+console.log(bruno);
+//yet, calcAge is still available:
+bruno.calcAge();
+
+console.log(bruno.__proto__ == PersonCl.prototype);
+
+/*
+// prototype can still be set like before:
+
+PersonCl.prototype.greet = function () {
+  console.log(`Hello ${this.firstName}!`);
+};*/
+
+bruno.greet();
+
+/////////////////////////
+// getters and setters //
+/////////////////////////
+
+const account = {
+  owner: 'Jonas',
+  movements: [200, 530, 120, 300],
+
+  get latest() {
+    return this.movements.slice(-1).pop();
+  },
+  //setters must have at least 1 argument.
+  set latest(mov) {
+    this.movements.push(mov);
+  },
+};
+
+//getter is a method that is called as a property:
+console.log(account.latest);
+//setter is a method that is called as a property:
+account.latest = 50;
+console.log(account.latest);
+
+console.log(bruno.age);
+bruno.fullName = 'Bruno De Clercq';
+console.log(bruno);
+console.log(bruno.fullName);
