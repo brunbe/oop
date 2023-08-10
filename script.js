@@ -96,6 +96,13 @@ console.dir(h1);
 // FUNCTIONS also have prototypes
 console.dir(a => a + 1);
 
+///////////////////
+// Static method //
+///////////////////
+Person.hey = function () {
+  console.log(`Hey there, buddy!`);
+};
+
 /*
 ///////////// coding challenge 1 ////////////////
 
@@ -136,7 +143,8 @@ class PersonCl {
     this.birthYear = birthYear;
   }
 
-  // everyting outside the constructor is on the prototype
+  // everyting outside the constructor is on the prototype except for static methods.
+  // instance methods:
   calcAge() {
     console.log(2037 - this.birthYear);
   }
@@ -156,6 +164,14 @@ class PersonCl {
 
   get fullName() {
     return this._fullName;
+  }
+
+  //////////////////
+  //Static Method //
+  //////////////////
+
+  static hey() {
+    console.log(`Hey there class-buddy!`);
   }
 }
 
@@ -204,3 +220,38 @@ console.log(bruno.age);
 bruno.fullName = 'Bruno De Clercq';
 console.log(bruno);
 console.log(bruno.fullName);
+PersonCl.hey();
+
+///////////////////
+// OBJECT.CREATE //
+///////////////////
+
+// this object is going to be the prototype of all the Person-objects
+const PersonProto = {
+  calcAge() {
+    console.log(2037 - this.birthYear);
+  },
+
+  init(fullName, birthYear) {
+    (this.fullName = fullName), (this.brithYear = birthYear);
+  },
+};
+
+// create a new person and set it's prototype to PersonProto:
+const steven = Object.create(PersonProto);
+
+// steven is now linked to PersonProto
+console.log(steven.__proto__ === PersonProto); // true
+
+/*
+steven.fullName = 'Steven Smith';
+steven.birthYear = 1991;
+
+// adding properties manually goes against the spirit of creating objects programatically
+// to avoid this we can create a method on the prototype that takes our data as arguments
+// and creates the properties in the object.
+// this method fulfills the role a CF but is not a CF.
+*/
+
+steven.init('Steven Smith', 1991);
+console.log(steven);
